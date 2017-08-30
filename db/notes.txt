@@ -1,0 +1,31 @@
+Comparison of Data and Object Model
+-----------------------------------
+
+Identity
+--------
+Data Model - Primary Key
+Object Model - equals()/Equal Operator to compare memory address
+
+Associations
+------------
+Data Model - Foreign Keys
+Object Model - Object References
+
+Association Navigation
+----------------------
+Data Model - joins
+Object Model - Accessors/References
+
+Inheritance
+-----------
+Data Model - Not available
+Object Model - Available
+
+Challenges with JDBC
+--------------------
+
+1) Error Handling
+2) Key Management
+3) Implementation varies as database varies
+4) Potential for errors - building the SQL queries
+5) Verbose Code
