@@ -29,3 +29,12 @@ Challenges with JDBC
 3) Implementation varies as database varies
 4) Potential for errors - building the SQL queries
 5) Verbose Code
+
+There are 2 ways to annotate in JPA - Field and Property (getter method)
+Field - annotated above the field
+property - annotated above the getter method
+
+When to use
+-----------
+Property - If the method has any business logic / validation then every time hibernate invokes the method the logic inside gets invoked.
+Field - breaking encapsulation as Hibernate will access the fields that are marked as private.

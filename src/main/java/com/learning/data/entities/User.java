@@ -2,19 +2,34 @@ package com.learning.data.entities;
 
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+import javax.persistence.Transient;
 
 @Entity
 @Table (name="finances_user")
+@Access (value=AccessType.FIELD)
 public class User
 {
 	@Id
-	@GeneratedValue (strategy=GenerationType.IDENTITY)
+	/*
+	 * @GeneratedValue (strategy=GenerationType.AUTO) OR @GeneratedValue
+	 * Default generator is AUTO - Hibernate picks the appropriate type based on the database used. Ex - if using Oracle then uses Sequence, if using mysql uses identity 
+	 * 
+	 * Table - strategy is relatively fast and most of the dbs support this appraoch as it is just a table in the database
+	 * Sequence - faster but not all dbs support it
+	 * Identity - slow , all dbs dont support it
+	 */
+//	@GeneratedValue (strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="user_table_generator")
+	@TableGenerator (name="user_table_generator", table="ifinances_keys", pkColumnName="PK_NAME", valueColumnName="PK_VALUE")
 	@Column (name="USER_ID")
 	private Long userId;
 	
@@ -24,24 +39,37 @@ public class User
 	@Column (name="LAST_NAME")
 	private String lastName;
 	
-	@Column (name="BIRTH_DATE")
+//	@Basic //Provides same functionality as nullable=false but the difference is that this annotation doesn't specify that a "not null" constraint should be added if Hibernate were to generate the DDL
+	@Column (name="BIRTH_DATE", nullable=false)//Instead of a database throwing exception if this field is set Hibernate throws exception
 	private Date birthDate;
 	
 	@Column (name="EMAIL_ADDRESS")
 	private String emailAddress;
 	
-	@Column (name="LAST_UPDATED_BY")
+	/*
+	 * In order to achieve this made changes to table structure 
+	 * alter table finances_user
+	 *	modify column LAST_UPDATED_BY varchar(45) null;
+	 */
+	@Column (name="LAST_UPDATED_BY", insertable=false)// This attribute prevents data being inserted into this column while executing an INSERT statement
 	private String lastUpdatedBy;
 	
-	@Column (name="LAST_UPDATED_DATE")
+	/*
+	 * To achieve this made changes to table structure
+	 * alter table finances_user
+	 *	modify column LAST_UPDATED_DATE datetime null;
+	 */
+	@Column (name="LAST_UPDATED_DATE", insertable=false)
 	private Date lastUpdatedDate;
 	
-	@Column (name="CREATED_BY")
+	@Column (name="CREATED_BY", updatable=false)// This attribute prevents data being updated into this column while executing an UPDATE statement
 	private String createdBy;
 	
-	@Column (name="CREATED_DATE")
+	@Column (name="CREATED_DATE", updatable=false)
 	private Date createdDate;
 	
+	@Transient //This column tells hibernate not to use this column in query building
+	private boolean valid;
 	/**
 	 * @return the userId
 	 */
@@ -167,5 +195,35 @@ public class User
 	public void setCreatedDate(Date createdDate)
 	{
 		this.createdDate = createdDate;
+	}
+	/**
+	 * @return the valid
+	 */
+	public boolean isValid()
+	{
+		return valid;
+	}
+	/**
+	 * @param valid the valid to set
+	 */
+	public void setValid(boolean valid)
+	{
+		this.valid = valid;
+	}
+	
+	@Override
+	public String toString(){
+		StringBuilder sb  = new StringBuilder();
+		sb.append("\tUser Id : ").append(getUserId());
+		sb.append("\tFirst Name : ").append(getFirstName());
+		sb.append("\tLast Name : ").append(getLastName());
+		sb.append("\temail : ").append(getEmailAddress());
+		sb.append("\tbirth date : ").append(getBirthDate());
+		sb.append("\tCreated By : ").append(getCreatedBy());
+		sb.append("\tCreated Date : ").append(getCreatedDate());
+		sb.append("\tUpdated BY : ").append(getLastUpdatedBy());
+		sb.append("\tUpdated Date : ").append(getLastUpdatedDate());
+		sb.append("\tValid : ").append(isValid());
+		return sb.toString();
 	}
 }
