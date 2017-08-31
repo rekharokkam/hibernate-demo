@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Formula;
+
 @Entity
 @Table (name="finances_user")
 @Access (value=AccessType.FIELD)
@@ -70,6 +72,17 @@ public class User
 	
 	@Transient //This column tells hibernate not to use this column in query building
 	private boolean valid;
+	
+	/*
+	 * This is HIBERNATE specific annotation
+	 *	This formula does not appear in INSERT and UPDATE. It gets executed only after a select has been fired against a Database. 
+	 *	Refresh the Object in the session context to get an updated calculation if There was an Insert/Update to the related fields
+	 *
+	 *	Formula uses native Query - this causes coupling ourselves to a database and migration might not be easy
+	 */
+	@Formula ("lower(datediff(curdate(), birth_date)/365)") 
+	private int age;
+	
 	/**
 	 * @return the userId
 	 */
@@ -211,6 +224,21 @@ public class User
 		this.valid = valid;
 	}
 	
+	/**
+	 * @return the age
+	 */
+	public int getAge()
+	{
+		return age;
+	}
+	/**
+	 * @param age the age to set
+	 */
+	public void setAge(int age)
+	{
+		this.age = age;
+	}
+	
 	@Override
 	public String toString(){
 		StringBuilder sb  = new StringBuilder();
@@ -224,6 +252,7 @@ public class User
 		sb.append("\tUpdated BY : ").append(getLastUpdatedBy());
 		sb.append("\tUpdated Date : ").append(getLastUpdatedDate());
 		sb.append("\tValid : ").append(isValid());
+		sb.append("\tAge : ").append(getAge());
 		return sb.toString();
 	}
 }

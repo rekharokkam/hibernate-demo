@@ -38,3 +38,31 @@ When to use
 -----------
 Property - If the method has any business logic / validation then every time hibernate invokes the method the logic inside gets invoked.
 Field - breaking encapsulation as Hibernate will access the fields that are marked as private.
+
+There are 2 types of TYPEs
+
+Entity Type and Value Type
+
+Value Type furthur has 3 categories
+
+1) Basic
+2) Composite
+3) Collection
+
+Entity Type - are those that correspond to a database ROW and have @Id annotation. These have a database identity.
+
+Value Type - no database Identity. No @Id annotation. They are composed with in an Entity Type. Cannot persist by itself but as part of an Entity 
+
+	Basic Type - Correspond to one Column in a relational Database. Ex - String - first_name, last_name , Long - userId. Ex- DummyUser Class
+	Composite Type - These are Types that are aggregated meaning contain other fields in them. These have no their own life cycle.
+		These Objects that are a collection of basic/composite/collection types. They cannot exist without an Entity Type. EX - Address Object in the DummyUser Class
+		We cannot form relationship to it outside of Entity Class.
+	Collection - Can Hold other value Types - either collection of basic types OR entity Types. Collection itself is a Value Type irrespective of what it contains
+
+
+
+
+
+
+
+

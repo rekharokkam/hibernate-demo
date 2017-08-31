@@ -4,9 +4,9 @@ import java.util.Date;
 
 import org.hibernate.Session;
 
-import com.learning.data.entities.TimeTest;
+//import com.learning.data.entities.TimeTest;
 
-//import com.learning.data.entities.User;
+import com.learning.data.entities.User;
 
 public class Application
 {
@@ -14,21 +14,26 @@ public class Application
 	public static void main(String[] args)
 	{
 		Session session = HibernateUtil.getSessionFactory().openSession();
-//		
-//		User user = new User ();
-//		user.setBirthDate(new Date());
-//		user.setCreatedBy("rrokkam");
-//		user.setCreatedDate(new Date());
-//		user.setEmailAddress("9.10@yahoo.com");
-//		user.setFirstName("9");
-//		user.setLastName("10");
-//		user.setLastUpdatedBy("rrokkam");
-//		user.setLastUpdatedDate(new Date());
-//		
-//		session.getTransaction().begin();
-//		session.save(user);
-//		session.getTransaction().commit();//Transaction should be commited for changes to be permanent
-//		
+		
+		User user = new User ();
+		user.setBirthDate(new Date());
+		user.setCreatedBy("rrokkam");
+		user.setCreatedDate(new Date());
+		user.setEmailAddress("9.10@yahoo.com");
+		user.setFirstName("9");
+		user.setLastName("10");
+		user.setLastUpdatedBy("rrokkam");
+		user.setLastUpdatedDate(new Date());
+		
+		session.getTransaction().begin();
+		session.save(user);
+		session.getTransaction().commit();//Transaction should be commited for changes to be permanent
+
+		session.refresh(user);
+		
+System.out.println(user);		
+		
+		
 //		session.beginTransaction();
 //		User dbUser = (User)session.get(User.class, user.getUserId());
 //System.out.println("DB User : \n" + dbUser);		
@@ -41,21 +46,21 @@ public class Application
 		
 		
 		/* Learning TimeStamp @Temporal annotation*/
-		try{
-			session.beginTransaction();
-			TimeTest timeTest = new TimeTest(new Date ());
-			session.save(timeTest);
-			session.getTransaction().commit();
-			
-			session.refresh(timeTest);
-			
-System.out.println(timeTest);			
-			
-		}catch (Exception e){
-			e.printStackTrace(System.err);
-		}finally{
-			session.close();
-			HibernateUtil.getSessionFactory().close();
-		}
+//		try{
+//			session.beginTransaction();
+//			TimeTest timeTest = new TimeTest(new Date ());
+//			session.save(timeTest);
+//			session.getTransaction().commit();
+//			
+//			session.refresh(timeTest);
+//			
+//System.out.println(timeTest);			
+//			
+//		}catch (Exception e){
+//			e.printStackTrace(System.err);
+//		}finally{
+//			session.close();
+//			HibernateUtil.getSessionFactory().close();
+//		}
 	}
 }
