@@ -16,12 +16,5 @@ public class DummyUser
 	private List<String> aliases; // Collection Value Type
 	private Address address; // Composite Value Type
 	
-	private static class Address{
-		private String addressLine1;
-		private String addressLine2;
-		private String city;
-		private String state;
-		private String zip;
-	}
 }
 

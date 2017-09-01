@@ -41,6 +41,9 @@ Field - breaking encapsulation as Hibernate will access the fields that are mark
 
 There are 2 types of TYPEs
 
+
+
+
 Entity Type and Value Type
 
 Value Type furthur has 3 categories
@@ -54,10 +57,47 @@ Entity Type - are those that correspond to a database ROW and have @Id annotatio
 Value Type - no database Identity. No @Id annotation. They are composed with in an Entity Type. Cannot persist by itself but as part of an Entity 
 
 	Basic Type - Correspond to one Column in a relational Database. Ex - String - first_name, last_name , Long - userId. Ex- DummyUser Class
-	Composite Type - These are Types that are aggregated meaning contain other fields in them. These have no their own life cycle.
-		These Objects that are a collection of basic/composite/collection types. They cannot exist without an Entity Type. EX - Address Object in the DummyUser Class
+	Composite Type - These are Types that are aggregated meaning contain other fields in them. These have no own life cycle.
+		These Objects that are a collection of basic/composite/collection types. They cannot exist without an Entity Type. EX - Address Object in the Bank Class
 		We cannot form relationship to it outside of Entity Class.
 	Collection - Can Hold other value Types - either collection of basic types OR entity Types. Collection itself is a Value Type irrespective of what it contains
+
+
+
+Composite Value Type - Use the below table to better Understand. Also refer to the Object DummyUser entity for Java Mappings
+--------------------
+
+
+Database Table Structure for USER table 
+|-------------------------------------------------------|
+| USER [Table Name]       								|
+|-------------------------------------------------------|
+|USER_ID [Primary Key]									|
+|FIRST_NAME												|
+|LAST_NAME												|
+|REFERRED_BY_USER_ID [foreign Key to the same table]	|
+|ADDRESS_LINE_1											|
+|ADDRESS_LINE_2											|
+|CITY													|
+|STATE													|
+|ZIP													|
+|-------------------------------------------------------|
+
+It is group of a bunch of fields/columns grouped together as an Object 
+Called Embedded in JPA and Composite Type in Hibernate
+Does not have an @Id annotation or a table of its own
+Only persisted or Queries in the context of the entity Class that contains this Composite Value Type.
+Data is embedded into the Source Object table.
+Ex - Address class from DummyUser Entity.
+
+Collection Value Type - Refer to bank and bank_contact tables - Java Objects refer to Bank Java Object
+---------------------
+
+Can define a collection of basic / Composite value Types.
+Once we have Collection Value Type then they need to have their own table.
+They have no lifecycle of their own they depend on their parent Entity life cycle.
+These cannot be queried, persisted, merged independent of their parent Object
+These do not have a unique identity
 
 
 

@@ -18,6 +18,7 @@
 
 	<mapping class="com.learning.data.entities.User"/>
 	<mapping class="com.learning.data.entities.TimeTest"/>
+	<mapping class="com.learning.data.entities.Bank"/>
 
   </session-factory>
 </hibernate-configuration>
