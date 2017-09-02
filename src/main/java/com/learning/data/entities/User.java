@@ -91,6 +91,9 @@ public class User
 	@Formula ("lower(datediff(curdate(), birth_date)/365)") 
 	private int age;
 	
+	/*
+	 * to achieve this I removed the columns - address line 1, address line 2, city, state and zip from finances_user table
+	 */
 	@ElementCollection //Collection Value Type of Composite(Embedded) Value Type
 	@CollectionTable (name="user_address", joinColumns=@JoinColumn(name="USER_ID"))
 	//Overrides the Composite Value Type values to match the current table structure

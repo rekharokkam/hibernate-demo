@@ -1,9 +1,13 @@
 package com.learning.data;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Environment;
+import org.hibernate.jdbc.Work;
 
 import com.learning.data.entities.Address;
 import com.learning.data.entities.Bank;
@@ -19,6 +23,18 @@ public class Application
 	{
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try{
+			
+			/* Testing Isolation level*/
+			session.doWork(new Work()
+			{
+				
+				public void execute(Connection conn) throws SQLException
+				{
+					System.out.println("Default Isolation level : " + Environment.isolationLevelToString(conn.getTransactionIsolation()));
+				}
+			});
+			
+			
 //			Bank bank = new Bank ();
 //			bank.setName("Federal trust");
 //			bank.setAddressLine1("33 wall Street");
@@ -38,37 +54,37 @@ public class Application
 //			session.save(bank);
 //			transaction.commit();
 			
-			User user = new User ();
-			user.setAge(22);
-			user.setBirthDate(new Date());
-			user.setCreatedBy("rrokkam");
-			user.setCreatedDate(new Date());
-			user.setEmailAddress("9.10@yahoo.com");
-			user.setFirstName("9");
-			user.setLastName("10");
-			user.setLastUpdatedBy("rrokkam");
-			user.setLastUpdatedDate(new Date());
-			
-			Address userAddress1 = new Address ();
-			userAddress1.setAddressLine1("line1");
-			userAddress1.setAddressLine2("line2");
-			userAddress1.setCity("Philadelphia");
-			userAddress1.setState("PA");
-			userAddress1.setZipCode("12345");
-
-			Address userAddress2 = new Address ();
-			userAddress2.setAddressLine1("line3");
-			userAddress2.setAddressLine2("line4");
-			userAddress2.setCity("New York");
-			userAddress2.setState("NY");
-			userAddress2.setZipCode("45643");
-
-			user.getAddress().add(userAddress1);
-			user.getAddress().add(userAddress2);
-			
-			session.getTransaction().begin();
-			session.save(user);
-			session.getTransaction().commit();//Transaction should be commited for changes to be permanent
+//			User user = new User ();
+//			user.setAge(22);
+//			user.setBirthDate(new Date());
+//			user.setCreatedBy("rrokkam");
+//			user.setCreatedDate(new Date());
+//			user.setEmailAddress("9.10@yahoo.com");
+//			user.setFirstName("9");
+//			user.setLastName("10");
+//			user.setLastUpdatedBy("rrokkam");
+//			user.setLastUpdatedDate(new Date());
+//			
+//			Address userAddress1 = new Address ();
+//			userAddress1.setAddressLine1("line1");
+//			userAddress1.setAddressLine2("line2");
+//			userAddress1.setCity("Philadelphia");
+//			userAddress1.setState("PA");
+//			userAddress1.setZipCode("12345");
+//
+//			Address userAddress2 = new Address ();
+//			userAddress2.setAddressLine1("line3");
+//			userAddress2.setAddressLine2("line4");
+//			userAddress2.setCity("New York");
+//			userAddress2.setState("NY");
+//			userAddress2.setZipCode("45643");
+//
+//			user.getAddress().add(userAddress1);
+//			user.getAddress().add(userAddress2);
+//			
+//			session.getTransaction().begin();
+//			session.save(user);
+//			session.getTransaction().commit();//Transaction should be commited for changes to be permanent
 //	
 //			session.refresh(user);
 			
