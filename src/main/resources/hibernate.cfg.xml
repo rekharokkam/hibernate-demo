@@ -19,6 +19,10 @@
 	<mapping class="com.learning.data.entities.User"/>
 	<mapping class="com.learning.data.entities.TimeTest"/>
 	<mapping class="com.learning.data.entities.Bank"/>
+	<mapping class="com.learning.data.entities.Credential"/>
+	<mapping class="com.learning.data.entities.Account"/>
+	<mapping class="com.learning.data.entities.Transaction"/>
+	<mapping class="com.learning.data.entities.Budget"/>
 
   </session-factory>
 </hibernate-configuration>

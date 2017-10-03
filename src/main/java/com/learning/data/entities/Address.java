@@ -20,6 +20,9 @@ public class Address
 	
 	@Column (name="ZIP_CODE")
 	public String zipCode;
+	
+	@Column (name="ADDRESS_TYPE")
+	public String addressType;
 
 	/**
 	 * @return the addressLine1
@@ -29,8 +32,6 @@ public class Address
 		return addressLine1;
 	}
 
-
-
 	/**
 	 * @param addressLine1 the addressLine1 to set
 	 */
@@ -38,8 +39,6 @@ public class Address
 	{
 		this.addressLine1 = addressLine1;
 	}
-
-
 
 	/**
 	 * @return the addressLine2
@@ -49,8 +48,6 @@ public class Address
 		return addressLine2;
 	}
 
-
-
 	/**
 	 * @param addressLine2 the addressLine2 to set
 	 */
@@ -58,8 +55,6 @@ public class Address
 	{
 		this.addressLine2 = addressLine2;
 	}
-
-
 
 	/**
 	 * @return the city
@@ -69,8 +64,6 @@ public class Address
 		return city;
 	}
 
-
-
 	/**
 	 * @param city the city to set
 	 */
@@ -78,8 +71,6 @@ public class Address
 	{
 		this.city = city;
 	}
-
-
 
 	/**
 	 * @return the state
@@ -118,4 +109,22 @@ public class Address
 	{
 		this.zipCode = zipCode;
 	}
+
+	/**
+	 * @return the addressType
+	 */
+	public String getAddressType()
+	{
+		return addressType;
+	}
+
+	/**
+	 * @param addressType the addressType to set
+	 */
+	public void setAddressType(String addressType)
+	{
+		this.addressType = addressType;
+	}
+	
+	
 }

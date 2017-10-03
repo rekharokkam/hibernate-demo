@@ -100,6 +100,95 @@ These cannot be queried, persisted, merged independent of their parent Object
 These do not have a unique identity
 
 
+Entity Association
+------------------
+Ex - Account table and Transaction Table. Transaction table has ACCOUNT_ID as the foreign key constraint to ACCOUNT table ACCOUNT_ID primary key column.
+Entity - One Object mapped to a single class that has its own identity [primary Key] with in the database and it has its own lifecycle.
+
+Entity Association - Reference from One entity to Another. Supported by underlying data model or tables that support the relationship.
+
+Source Object/ Target Object - Any Object/table that holds the foreign key is the Source Object - Ex - Transaction. Entity whose primary key is the foreign key in another table becomes
+the Target Object Ex - Account.
+Account is the field type with in the Transaction Type.
+
+BiDirectional and UniDirectional.
+---------------------------------
+UniDirectional
+--------------
+Inside Transaction Object - private Account account;
+BUT Account Object has no variable for holding list of transactions.
+If Source Object [Transaction in this case] has Target Object [Account Object] BUT Target Object does not have Source Object then it is UniDirectional
+Ex - Transaction Object has Account Object BUT Account Object does not have List of Transactions. Account could not reach back and grab all the transactions. 
+Account having List of Transactions is optional.
+
+
+BiDirectional
+-------------
+Inside Transaction Object - private Account account;
+Inside Account Object - private List<Transaction> transactions;
+We can skip Account having transactions. It is useful only if we refer to all the transactions of an account.
+
+Types of Entity Associations
+----------------------------
+OneToOne - One User can have one set of Credential
+OneToMany - One Account can have Multiple Transactions
+ManyToOne - Many Transactions can have one Account
+ManyToMany - Many users can be associated with many Accounts. Husband and Wife could be operating multiple accounts.
+
+Getting a big stack trace of PDT error with the latest mysql connector. So downgrade the version to 5.1.39 to resolve this issue.
+
+OneToOne - Bidirectional relationship.
+--------------------------------------
+Never add @JoinColumn and @cascade on the non-owning entity. An entity that does not contain a foreign key But Primary Key is the non-owning entity.
+@JoinColumn and @cascade are added only on the Source Object. Ex - User and Credential.
+Credential is the Owning / Source Object. @JoinColumn and @Cascade are added on the Credential Entity.
+User is the Non-Owning/target Object as it has no foreign key. @JoinColumn and @Cascade are not added on non-owning entity as it leads to circle of persisting each other. 
+
+
+When using bi-directional relationship we need to manage both sides of relationship meaning we need to set Objects on both the Objects.
+credential.setUser (User) and user.setCredential (Credential).
+
+In case of UniDirectional OneToOne all the JPA annotations @JoinColumn and @cascade are available only on the Source Entity - Credential.
+private Credential credential; is not available on the User Object, hence @OneToOne (mappedBy="user") is also not available. 
+
+ManyToOne - OneToMany
+---------------------
+In case of OneToMany Unidirectional - private Account account; is not available on the Transaction Entity, hence @JoinColumn (name="ACCOUNT_ID")  is added on the Account Object.
+
+When using bi-directional relationship we need to manage both sides of relationship meaning we need to set Objects on both the Objects.
+Account.setTransactions (List<Transaction>) and Transaction.setAccount (account).
+
+
+@JoinTable
+----------
+Join/Junction/Intersection table is created NOT ONLY for many to many relationships But also for a ONE-MANY relationship as below.
+Budget to Transaction is ONE-MANY relationship.
+Ex - Transaction, Budget and Budget_transaction tables. Not all Transactions have a budget Id associated with them in that case having budget_Id in the transaction table is not the right choice
+For a scenario like this we create the Join table - budget_transaction so that only those transactions that are associated with budget_id are added to this table.
+
+We can add @JoinTable on either side of the relationship but having it on the Budget table makes more sense as it follows the teacher.
+
+@JoinTable - In the case of OneToMany relationship, Owning entity is the entity with the @JoinTable Annotation. In this case Budget Entity is the owning entity as it has @JoinTable Annotation.
+You can choose which side will have @JoinTable Annotation.
+
+CAREFUL - when you add cascade.ALL on all the entities be very careful when you add those objects for persisting.
+Ex - Transaction has cascade.ALL on "account" and Account has cascade.ALL on "transactions" so when saving Account/Transaction add either Account on Transaction OR Transaction on Account.
+Another example is commented - [beltPurchase.setBudget(budget);] because if this comment is removed while saving the budget Object there is cyclic dependency error.
+
+ManyToMany - 
+-----------
+When we model ManyToMany UniDirectional flow we can pick any side as the owning side. Teacher picked "Account" as the owning side.
+Ex - Account, User, user_account
+
+
+
+
+
+ 
+
+
+
+
 
 
 

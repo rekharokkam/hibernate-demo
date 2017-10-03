@@ -2,21 +2,26 @@ package com.learning.data.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
+//import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
@@ -98,11 +103,15 @@ public class User
 	@CollectionTable (name="user_address", joinColumns=@JoinColumn(name="USER_ID"))
 	//Overrides the Composite Value Type values to match the current table structure
 	@AttributeOverrides ({@AttributeOverride (name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
-		@AttributeOverride(name="addressLine2", column=@Column(name="USER_ADDRESS_LINE_2")),
-		@AttributeOverride(name="city", column=@Column(name="CITY")),
-		@AttributeOverride(name="state", column=@Column(name="STATE")),
-		@AttributeOverride(name="zipCode", column=@Column(name="ZIP_CODE"))})
-	private List<Address> address = new ArrayList<Address>();
+		@AttributeOverride(name="addressLine2", column=@Column(name="USER_ADDRESS_LINE_2"))})
+	private List<Address> addresses = new ArrayList<>();
+	
+	//This attribute is required only for bi-directional flow.
+	@OneToOne (mappedBy="user")//Name of this entity on the Owning entity that maps the relationship - name of the attribute on Credential Object that represents this Object
+	private Credential credential;
+	
+	@ManyToMany (cascade=CascadeType.ALL, mappedBy="users")
+	private Set<Account> accounts = new HashSet<>();
 	
 	/**
 	 * @return the userId
@@ -263,16 +272,16 @@ public class User
 	/**
 	 * @return the address
 	 */
-	public List<Address> getAddress()
+	public List<Address> getAddresses()
 	{
-		return address;
+		return addresses;
 	}
 	/**
 	 * @param address the address to set
 	 */
-	public void setAddress(List<Address> address)
+	public void setAddresses(List<Address> address)
 	{
-		this.address = address;
+		this.addresses = address;
 	}
 	
 	@Override
@@ -290,5 +299,33 @@ public class User
 		sb.append("\tValid : ").append(isValid());
 		sb.append("\tAge : ").append(getAge());
 		return sb.toString();
+	}
+	/**
+	 * @return the credential
+	 */
+	public Credential getCredential()
+	{
+		return credential;
+	}
+	/**
+	 * @param credential the credential to set
+	 */
+	public void setCredential(Credential credential)
+	{
+		this.credential = credential;
+	}
+	/**
+	 * @return the accounts
+	 */
+	public Set<Account> getAccounts()
+	{
+		return accounts;
+	}
+	/**
+	 * @param accounts the accounts to set
+	 */
+	public void setAccounts(Set<Account> accounts)
+	{
+		this.accounts = accounts;
 	}
 }
