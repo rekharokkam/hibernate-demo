@@ -207,6 +207,14 @@ public class Bank
 		this.address.zipCode = zipCode;
 	}
 
+	public void setAddressType (String addressType){
+		this.address.addressType = addressType;
+	}
+	
+	public String getAddressType (){
+		return address.addressType;
+	}
+	
 	/**
 	 * @return the createdBy
 	 */

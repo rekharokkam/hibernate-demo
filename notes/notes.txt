@@ -181,7 +181,81 @@ When we model ManyToMany UniDirectional flow we can pick any side as the owning 
 Ex - Account, User, user_account
 
 
+HibernateAPI
+------------
+There are 3 major pillars of hibernate - hibernate configuration, mapping metadata on our entities, invoking persistence operations.
 
+Different states of an Entity - Transient [New], Detached, Persistent, Removed.
+2 states - persistent and removed are inside the Persistence Context. refer to the gliffy pic - Entity_Lifecycle.jpg
+
+
+Transient - created using new Operator and a constructor. Object has no database Identity at this point. Its not associated with a row. There is no Primary key assigned to it.
+If we were to run garbage collection then this object would be removed and stored anywhere in any secondary collection.
+
+Persistent - An entity that has a primary key associated with it. It is associated with database row. We can perform all sorts of manipulation on the entity. 
+Manipulation means setting different fields will be tracked and its state can then be sent to database and saved. Entity enters into the persistent Context. 
+There ways of putting an Object in the Persistent State
+1) Save a transient Object and make it persistent.
+2) Fetch an Object from database. It will be considered persistent.
+3) Refer to a transient Object from another persistent Object. Add a transient Object to a collection inside an Object that's in the persistent state.
+
+Removed - Object scheduled to be deleted. When we want to remove an entity from persistent context. When Persistent Context syncs up with the database this entity gets deleted.
+
+Detached - Object is in the persistent context BUT that persistent context is closed. We still have a reference to this Object.	
+
+Persistent Context  -
+-------------------
+
+1) Provides With a cache of all the persistent entity instances.
+2) When we put Entities into Persistence State all the changes made to those entities are held within the persistence Context.
+3) Persistence Context are usually created with a session Object.
+
+SessionFactory factory = HibernateUtil.getSessionFactory ();
+Session session = factory.openSession (); //New Persistence Context is created.
+
+//Perform different operations on the entities
+
+session.close ();
+factory.shutdown ();
+
+Whenever we perform openSession () a new Persistence Context is created.
+
+We create a new Object using new Operator and Constructor. Object is in the transient state. Now through session.save() when we persist this Object, Object gets associated with primary key 
+and moves into the Persistent state. Even if we fetch some Objects from database through session those Objects gets placed in the persistent Context. Any changes made to these Objects are
+tracked by the Persistent Context and it is able to synchronize the Object Model with the Database Model.
+
+Our Persistence Manager is the Session Object. Session manipulates the persistence Context and the entities stored within it.
+
+For different States and Actions and state changes refer to the draw.io file - entity_state_action.xml
+
+Retrieving Entities 
+-------------------
+There are 2 ways to retrieve entities from hibernate - get() and load ()
+
+in case of get() first hibernate looks into its persistence context cache, if the entity is already available then returns the entity from cache.
+in case of load (), hibernate first returns a proxy and defers the actual database call until some data on the proxy is accessed.
+
+Run populate.sql from db/ folder to truncate all the data from all the tables.
+
+When working with entities that do not exist - get() + accessing any method on the entity - will throw nullPointerException
+When working with entities that do not exist - load() + accessing any method on the entity - will throw ObjectNotFoundException because of the proxy issue.
+
+Modifying an Entity
+--------------------
+after an entity is retrieved from Database meaning an entity when goes into Persistence Context we can make necessary changes Persistence Context will keep track of these changes.
+When transaction is commited Persistence Context syncs the changes made to Object Model to Database Model. It is important that these changes are made inside of a transaction.
+
+Re-Attaching an Entity 
+----------------------
+Re-Attach an entity using update() method
+
+saveOrUpdate
+------------
+This does both re-attach an entity to the persistence Context and also persist the entity into the database.
+
+ 
+
+ 
 
 
  
