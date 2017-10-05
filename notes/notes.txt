@@ -253,6 +253,18 @@ saveOrUpdate
 ------------
 This does both re-attach an entity to the persistence Context and also persist the entity into the database.
 
+flush() Method
+---------------
+flush() is found on the session interface. When we invoke flush() what happens is, we are taking all the changes in the persistence context and sync them with underlying database.
+transaction houses the connection.
+when we invoke transaction.commit () - this method forces flush on the session. 
+
+There are 3 times a flush will be called on the session  
+1) call flush explicitly - session.flush ()
+2) when we call transaction.commit - this method invokes session.flush()
+3) when we perform a select operation if flush will occur before it
+
+On Transaction rollback even the updates/inserts made calling flush () are rolledback.
  
 
  

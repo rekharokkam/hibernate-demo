@@ -1,5 +1,6 @@
 package com.learning.data;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -35,6 +36,7 @@ public class ApplicationHibernateAPI
 		//This is demo for Entity different states and transition into different states. Its not working code - ends here
 		
 		Session session = HibernateUtil.getSessionFactory().openSession();
+		org.hibernate.Transaction tx = session.beginTransaction();
 		
 		//---------Entity State change from Transient to Persistent and How Entity gets associated with Persistence COntext - starts here
 //		Account account = createNewAccount();
@@ -50,7 +52,7 @@ public class ApplicationHibernateAPI
 //		System.out.println(session.contains(beltTransaction));
 		
 		try{
-			org.hibernate.Transaction tx = session.beginTransaction();
+			
 //			session.save(account);
 //			
 //			System.out.println(session.contains(account));
@@ -116,29 +118,42 @@ public class ApplicationHibernateAPI
 			//Re-Attaching a detached session - ends here
 
 			//SaveOrUpdate demo - starts here
-			Bank detachedBank = (Bank)session.get(Bank.class, 1L);
-			tx.commit();
-			session.close();
-			
-			Bank transientBank = createBank();
-			Session session2 = HibernateUtil.getSessionFactory().openSession();
-			org.hibernate.Transaction tx2 = session2.beginTransaction();
-			
-			session2.saveOrUpdate(transientBank);
-			session2.saveOrUpdate(detachedBank);
-			
-			detachedBank.setName("re-attached Bank");
-			
-			tx2.commit();
-			session2.close();
+//			Bank detachedBank = (Bank)session.get(Bank.class, 1L);
+//			tx.commit();
+//			session.close();
+//			
+//			Bank transientBank = createBank();
+//			Session session2 = HibernateUtil.getSessionFactory().openSession();
+//			org.hibernate.Transaction tx2 = session2.beginTransaction();
+//			
+//			session2.saveOrUpdate(transientBank);
+//			session2.saveOrUpdate(detachedBank);
+//			
+//			detachedBank.setName("re-attached Bank");
+//			
+//			tx2.commit();
+//			session2.close();
 			
 			//SaveOrUpdate demo - ends here
 			
-//			tx.commit();
+			//flush() Method demo - starts here
+			Bank bank = (Bank)session.get(Bank.class, 1L);
+			bank.setName("Something different again for Exception");
+			System.out.println("Calling Flush");
+			session.flush();
 			
+			bank.setAddressLine1("Another Address Line again for Exception");
+			System.out.println("Calling Commit");
+			
+			throwRuntimeException ();
+			
+			tx.commit();
+			//flush() method demo - ends here
 			
 		}catch (Exception e){
+			tx.rollback();
 			e.printStackTrace(System.err);
+			
 		}finally {
 //			session.close();
 			HibernateUtil.closeSessionFactory();
@@ -205,6 +220,10 @@ public class ApplicationHibernateAPI
 		bank.setState("NY");
 		bank.setZipCode("10000");
 		return bank;
+	}
+	
+	private static void throwRuntimeException (){
+		throw new RuntimeException("On purpose");
 	}
 
 }
