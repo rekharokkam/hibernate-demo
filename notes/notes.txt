@@ -190,7 +190,7 @@ Different states of an Entity - Transient [New], Detached, Persistent, Removed.
 
 
 Transient - created using new Operator and a constructor. Object has no database Identity at this point. Its not associated with a row. There is no Primary key assigned to it.
-If we were to run garbage collection then this object would be removed and stored anywhere in any secondary collection.
+If we were to run garbage collection then this object would be removed and not stored anywhere in any secondary collection.
 
 Persistent - An entity that has a primary key associated with it. It is associated with database row. We can perform all sorts of manipulation on the entity. 
 Manipulation means setting different fields will be tracked and its state can then be sent to database and saved. Entity enters into the persistent Context. 
