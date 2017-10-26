@@ -138,7 +138,7 @@ public class ApplicationHibernateAPI
 			
 			//flush() Method demo - starts here
 			Bank bank = (Bank)session.get(Bank.class, 1L);
-			bank.setName("Something different again for Exception");
+			bank.setName("Something different again for Exception");//Hibernate recognizes this as bank has been dirtied
 			System.out.println("Calling Flush");
 			session.flush();
 			

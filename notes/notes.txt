@@ -56,7 +56,7 @@ Entity Type - are those that correspond to a database ROW and have @Id annotatio
 
 Value Type - no database Identity. No @Id annotation. They are composed with in an Entity Type. Cannot persist by itself but as part of an Entity 
 
-	Basic Type - Correspond to one Column in a relational Database. Ex - String - first_name, last_name , Long - userId. Ex- DummyUser Class
+	Basic Type - Correspond to one Column in a relational Database. Ex - String - first_name, last_name , Long - userId. Ex- User Class
 	Composite Type - These are Types that are aggregated meaning contain other fields in them. These have no own life cycle.
 		These Objects that are a collection of basic/composite/collection types. They cannot exist without an Entity Type. EX - Address Object in the Bank Class
 		We cannot form relationship to it outside of Entity Class.
@@ -64,7 +64,7 @@ Value Type - no database Identity. No @Id annotation. They are composed with in 
 
 
 
-Composite Value Type - Use the below table to better Understand. Also refer to the Object DummyUser entity for Java Mappings
+Composite Value Type - Use the below table to better Understand. Also refer to the Object User entity for Java Mappings
 --------------------
 
 
@@ -88,7 +88,7 @@ Called Embedded in JPA and Composite Type in Hibernate
 Does not have an @Id annotation or a table of its own
 Only persisted or Queries in the context of the entity Class that contains this Composite Value Type.
 Data is embedded into the Source Object table.
-Ex - Address class from DummyUser Entity.
+Ex - Address class from User Entity.
 
 Collection Value Type - Refer to bank and bank_contact tables - Java Objects refer to Bank Java Object
 ---------------------
@@ -232,8 +232,11 @@ Retrieving Entities
 -------------------
 There are 2 ways to retrieve entities from hibernate - get() and load ()
 
+JPA equivalent of these methods are find () and getReference (). These 2 methods behave the same as get () and load () methods.
+
 in case of get() first hibernate looks into its persistence context cache, if the entity is already available then returns the entity from cache.
-in case of load (), hibernate first returns a proxy and defers the actual database call until some data on the proxy is accessed.
+If not looks for the Object in the Database.
+in case of load (), hibernate first returns a proxy and defers the actual database call until some getter method on the proxy is accessed.
 
 Run populate.sql from db/ folder to truncate all the data from all the tables.
 
@@ -247,7 +250,8 @@ When transaction is commited Persistence Context syncs the changes made to Objec
 
 Re-Attaching an Entity 
 ----------------------
-Re-Attach an entity using update() method
+Re-Attach an entity using update() method. update() is not called for persisting changes to an entity in persistence context. Calling tx.commit() will 
+persist the changes made to the entity.
 
 saveOrUpdate
 ------------
@@ -268,7 +272,10 @@ On Transaction rollback, even the updates/inserts made calling flush () are roll
  
  
  JPA API
- --------
+ -------
+ 
+ Comparison of JPA and Hibernate API - Hibernate_JPA_Comparison.xml
+ 
  Session is from Hibernate
  EntityManager is from JPA
  
@@ -278,12 +285,14 @@ On Transaction rollback, even the updates/inserts made calling flush () are roll
  Application Managed - Program in the application controls when entitymanager is created and shutdown.
  Container Managed - full blown enterprise containers like weblogic, Jboss JEE servers that manage the entitymanager.
  
- Resource Local Transaction - means application is responsible for begning the transactions and commit/rollback
+ Resource Local Transaction - means application is responsible for beginning the transactions and commit/rollback
 
- 
 EntityManagerFactory - SessionFactory
 EntityManager - Session
 EntityTransaction - Transaction
+
+No need to specify the Entity class details like we did in hibernate.cfg.xml file - "	<mapping class="com.learning.data.entities.User"/>"
+JPA scans all the classes for @Entity annotation.
 
 clear() and detach ()
 ---------------------
@@ -293,12 +302,14 @@ detach () will detach a single entity from Persistence Context.
 
 merge()
 -------
-this method takes an entity and returns an entity. This method first looks for the parameter Object in the persistence Context if not found queries the database to fetch the Object.
-If the Object was found in database then merges the changes made on the parameter Object with the Object fetched from Database and adds the returned Object onto persistence Context and 
-on commit these changes will be persisted.
+this method takes an entity and returns an entity. This method first looks for the parameter Object in the persistence Context if not found 
+queries the database to fetch the Object.
+If the Object was found in database then merges the changes made on the parameter Object with the Object fetched from Database and 
+adds the returned Object onto persistence Context and on commit these changes will be persisted.
 If the Object was NOT found in database or Persistence Context then treats the returned Object as transient and inserts a new record on commit.
 
-One thing we should be careful about though is that the changes made to the returned Object is persisted as it is added to Persistence Context and not the original parameter Object.
+One thing we should be careful about though is that the changes made to the returned Object is persisted as it is added to Persistence Context and 
+not the original parameter Object.
 
 
 1. Primary Key (PK) - uniquely identifies a row in a table. May use one or more columns. A single-column PK is usually also known as a Surrogate key, which is merely a PK column that uses a generated number that is unique in the table. A Primary Key can be either a single column using a surrogate (meaningless) number (a.k.a. Surrogate Key) or a column or set of columns that have meaning to the user and uniquely identify a row in a table (Natural Key). 
@@ -323,7 +334,7 @@ One way is to use
 
 @Inheritance (strategy=Table_per_class) - hibernate will use UNION ALL which gets expensive when there are many rows - Investment , Stock and Bond
 
-@Inheritance (strategy=Single_table) - hibernate will use one table with columns for both child classes. We then use @discriminator annotation to mention which column has the discriminating value
+@Inheritance (strategy=Single_table) - hibernate will use one table with columns for both child classes. We then use @discriminator annotation to mention which column has the discriminating value.
 
 
  
