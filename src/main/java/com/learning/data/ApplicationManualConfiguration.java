@@ -1,6 +1,5 @@
 package com.learning.data;
 
-import java.util.Date;
 import java.util.Properties;
 
 import org.hibernate.Session;
@@ -38,15 +37,15 @@ public class ApplicationManualConfiguration
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		
-		AccountType accountType = new AccountType();
-		
-		accountType.setName("Checking");
-		accountType.setCreatedDate(new Date());
-		accountType.setLastUpdatedDate(new Date());
-		accountType.setCreatedBy("rrokkam");
-		accountType.setLastUpdatedBy("rrokkam");
-		
-		session.save(accountType);
+//		AccountType accountType = new AccountType();
+//		
+//		accountType.setName("Checking");
+//		accountType.setCreatedDate(new Date());
+//		accountType.setLastUpdatedDate(new Date());
+//		accountType.setCreatedBy("rrokkam");
+//		accountType.setLastUpdatedBy("rrokkam");
+//		
+//		session.save(accountType);
 		
 		session.getTransaction().commit();
 		

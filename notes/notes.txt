@@ -107,8 +107,8 @@ Entity - One Object mapped to a single class that has its own identity [primary 
 
 Entity Association - Reference from One entity to Another. Supported by underlying data model or tables that support the relationship.
 
-Source Object/ Target Object - Any Object/table that holds the foreign key is the Source Object - Ex - Transaction. Entity whose primary key is the foreign key in another table becomes
-the Target Object Ex - Account.
+Source Object/ Target Object - Any Object/table that holds the foreign key is the Source Object - Ex - Transaction. 
+Entity whose primary key is the foreign key in another table becomes the Target Object Ex - Account.
 Account is the field type with in the Transaction Type.
 
 BiDirectional and UniDirectional.
@@ -163,16 +163,19 @@ Account.setTransactions (List<Transaction>) and Transaction.setAccount (account)
 ----------
 Join/Junction/Intersection table is created NOT ONLY for many to many relationships But also for a ONE-MANY relationship as below.
 Budget to Transaction is ONE-MANY relationship.
-Ex - Transaction, Budget and Budget_transaction tables. Not all Transactions have a budget Id associated with them in that case having budget_Id in the transaction table is not the right choice
+Ex - Transaction, Budget and Budget_transaction tables. 
+Not all Transactions have a budget Id associated with them in that case having budget_Id in the transaction table is not the right choice
 For a scenario like this we create the Join table - budget_transaction so that only those transactions that are associated with budget_id are added to this table.
 
 We can add @JoinTable on either side of the relationship but having it on the Budget table makes more sense as it follows the teacher.
 
-@JoinTable - In the case of OneToMany relationship, Owning entity is the entity with the @JoinTable Annotation. In this case Budget Entity is the owning entity as it has @JoinTable Annotation.
+@JoinTable - In the case of OneToMany relationship, Owning entity is the entity with the @JoinTable Annotation. 
+In this case Budget Entity is the owning entity as it has @JoinTable Annotation.
 You can choose which side will have @JoinTable Annotation.
 
 CAREFUL - when you add cascade.ALL on all the entities be very careful when you add those objects for persisting.
-Ex - Transaction has cascade.ALL on "account" and Account has cascade.ALL on "transactions" so when saving Account/Transaction add either Account on Transaction OR Transaction on Account.
+Ex - Transaction has cascade.ALL on "account" and Account has cascade.ALL on "transactions" 
+so when saving Account/Transaction add either Account on Transaction OR Transaction on Account.
 Another example is commented - [beltPurchase.setBudget(budget);] because if this comment is removed while saving the budget Object there is cyclic dependency error.
 
 ManyToMany - 
@@ -189,7 +192,8 @@ Different states of an Entity - Transient [New], Detached, Persistent, Removed.
 2 states - persistent and removed are inside the Persistence Context. refer to the gliffy pic - Entity_Lifecycle.jpg
 
 
-Transient - created using new Operator and a constructor. Object has no database Identity at this point. Its not associated with a row. There is no Primary key assigned to it.
+Transient - created using new Operator and a constructor. Object has no database Identity at this point. Its not associated with a row. 
+There is no Primary key assigned to it.
 If we were to run garbage collection then this object would be removed and not stored anywhere in any secondary collection.
 
 Persistent - An entity that has a primary key associated with it. It is associated with database row. We can perform all sorts of manipulation on the entity. 
@@ -199,7 +203,8 @@ There ways of putting an Object in the Persistent State
 2) Fetch an Object from database. It will be considered persistent.
 3) Refer to a transient Object from another persistent Object. Add a transient Object to a collection inside an Object that's in the persistent state.
 
-Removed - Object scheduled to be deleted. When we want to remove an entity from persistent context. When Persistent Context syncs up with the database this entity gets deleted.
+Removed - Object scheduled to be deleted. When we want to remove an entity from persistent context. 
+When Persistent Context syncs up with the database this entity gets deleted.
 
 Detached - Object is in the persistent context BUT that persistent context is closed. We still have a reference to this Object.	
 
@@ -220,8 +225,9 @@ factory.shutdown ();
 
 Whenever we perform openSession () a new Persistence Context is created.
 
-We create a new Object using new Operator and Constructor. Object is in the transient state. Now through session.save() when we persist this Object, Object gets associated with primary key 
-and moves into the Persistent state. Even if we fetch some Objects from database through session those Objects gets placed in the persistent Context. Any changes made to these Objects are
+We create a new Object using new Operator and Constructor. Object is in the transient state. 
+Now through session.save() when we persist this Object, Object gets associated with primary key and moves into the Persistent state. 
+Even if we fetch some Objects from database through session those Objects gets placed in the persistent Context. Any changes made to these Objects are
 tracked by the Persistent Context and it is able to synchronize the Object Model with the Database Model.
 
 Our Persistence Manager is the Session Object. Session manipulates the persistence Context and the entities stored within it.
@@ -245,8 +251,10 @@ When working with entities that do not exist - load() + accessing any method on 
 
 Modifying an Entity
 --------------------
-after an entity is retrieved from Database meaning an entity when goes into Persistence Context we can make necessary changes Persistence Context will keep track of these changes.
-When transaction is commited Persistence Context syncs the changes made to Object Model to Database Model. It is important that these changes are made inside of a transaction.
+after an entity is retrieved from Database meaning an entity when goes into Persistence Context we can make necessary changes,
+Persistence Context will keep track of these changes.
+When transaction is committed Persistence Context syncs the changes made to Object Model to Database Model. 
+It is important that these changes are made inside of a transaction.
 
 Re-Attaching an Entity 
 ----------------------
@@ -259,9 +267,9 @@ This does both re-attach an entity to the persistence Context and also persist t
 
 flush() Method
 ---------------
-flush() is found on the session interface. When we invoke flush() what happens is, we are taking all the changes in the persistence context and sync them with underlying database.
-transaction houses the connection.
-when we invoke transaction.commit () - this method forces flush on the session. 
+flush() is found on the session interface. When we invoke flush() what happens is, 
+we are taking all the changes in the persistence context and sync them with underlying database.
+transaction houses the connection. When we invoke transaction.commit () - this method forces flush on the session. 
 
 There are 3 times a flush will be called on the session  
 1) call flush explicitly - session.flush ()
@@ -324,18 +332,39 @@ not the original parameter Object.
 
 Using Compound Primary Keys
 ---------------------------
-Compound Primary Keys is using combination of 2 or more natural keys as the primary key. Ex- Current Class
+Compound Primary Keys is using combination of 2 or more natural keys as the primary key. Ex- Currency Class.
 
-Inheritance
------------
+MappedSuperClass
+----------------
+This is one form of inheritance. Refer to classes - Investment, Stock and Bond.
 
-One way is to use
-@MappedSuperClass 
+This approach is great when we want to re-use the state ex- if more than one entity share same fields then good idea to use a parent class.
+
+Cannot create an entity from a MappedSuperClass. These super classes have no persistence lifecycle of their own. 
+
+When not to use this approach
+-----------------------------
+
+1) If we have the scenario where in we have to fetch Bond and Stock in the same query together then MappedSuperClass is not the right choice
+
+
+2) Would you ever refer to the investment independently as opposed to Stock and Bond ?? If so then MappedSuperClass is not the right choice.
+
+Table Per class
+----------------
+We need to use table generator when using table per class inheritance - refer to Investment Class
 
 @Inheritance (strategy=Table_per_class) - hibernate will use UNION ALL which gets expensive when there are many rows - Investment , Stock and Bond
 
-@Inheritance (strategy=Single_table) - hibernate will use one table with columns for both child classes. We then use @discriminator annotation to mention which column has the discriminating value.
+@Inheritance (strategy=Single_table) - hibernate will use one table with columns for both child classes. 
+We then use @discriminator annotation to mention which column has the discriminating value.
+This approach gives a better performance over Table_per_class as the queries do not use UNION ALL.
 
+Building a Persistence Layer
+----------------------------
+Have a Data package where we place all the code related to Data persistence.
+Recommended is the DAO pattern.
+Every Entity will have DAO - interface, abstract DAO that performs lot of the logic.
 
  
 

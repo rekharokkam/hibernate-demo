@@ -55,7 +55,7 @@ public class Transaction
 	
 	//This attribute is required only for bi-directional relationship
 	@ManyToOne (cascade=CascadeType.ALL)
-	@JoinColumn (name="ACCOUNT_ID")
+	@JoinColumn (name="ACCOUNT_ID", referencedColumnName="ACCOUNT_ID")
 	private Account account;
 	
 	/*

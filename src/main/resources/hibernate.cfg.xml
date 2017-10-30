@@ -23,6 +23,11 @@
 	<mapping class="com.learning.data.entities.Account"/>
 	<mapping class="com.learning.data.entities.Transaction"/>
 	<mapping class="com.learning.data.entities.Budget"/>
+	<mapping class="com.learning.data.entities.Currency"/>
+	<mapping class="com.learning.data.entities.Market"/>
+	<mapping class="com.learning.data.entities.Stock"/>
+	<mapping class="com.learning.data.entities.Bond"/>
+	<mapping class="com.learning.data.entities.Portfolio"/>
 
   </session-factory>
 </hibernate-configuration>
