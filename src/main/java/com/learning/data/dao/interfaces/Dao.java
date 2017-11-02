@@ -6,9 +6,9 @@ import org.hibernate.Session;
 
 public interface Dao <T, ID>
 {
-	public T findById (ID id);
+	public List <T> findAll ();
 	
-	public List<T> findAll ();
+	public T findById (ID id);
 	
 	public T save (T entity);
 	
@@ -19,4 +19,5 @@ public interface Dao <T, ID>
 	public void clear ();
 	
 	public void setSession (Session session);
+	
 }

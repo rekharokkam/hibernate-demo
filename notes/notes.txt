@@ -1,3 +1,22 @@
+DB Credentials
+---------------
+schema - local
+userName - root
+password - June2017
+
+schema - ifinances2
+userName - infinite2
+password - skills2
+
+schema - ifinances
+userName - infinite
+password - skills
+
+schema - practice
+userName - spring
+password - spring
+
+
 Comparison of Data and Object Model
 -----------------------------------
 
@@ -365,6 +384,21 @@ Building a Persistence Layer
 Have a Data package where we place all the code related to Data persistence.
 Recommended is the DAO pattern.
 Every Entity will have DAO - interface, abstract DAO that performs lot of the logic.
+
+Schema Generation
+-----------------
+Hibernate can create/validate/Update/Drop tables using configuration in hibernate.cfg.xml file.
+I used schema "ifinances2" for this.
+"hdm2ddl.auto" property values - 
+	create - will create all the tables that correspond to our entity model from the hibernate.cfg.xml file
+	validate - hibernate will inspect the database to make sure all the tables required by the entity model are in place. If anything is not set then an error happens.
+	update - hibernate looks at the existing schema to make sure everything is in place. If not it adds it.
+	create-drop - hibernate creates all the tables per entity model, when done with the app it drops all the tables leaving a fresh schema.
+	
+MySQL Script to read current User - select User(), current_user() 
+
+
+
 
  
 
