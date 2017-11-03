@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,7 +55,7 @@ public class Transaction
 	private Date createdDate;
 	
 	//This attribute is required only for bi-directional relationship
-	@ManyToOne (cascade=CascadeType.ALL)
+	@ManyToOne (cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn (name="ACCOUNT_ID", referencedColumnName="ACCOUNT_ID")
 	private Account account;
 	

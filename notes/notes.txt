@@ -428,6 +428,10 @@ Lazy Loading
 @ManyToMany - fetch type is LAZY by default
 @ManyToOne - fetch type is EAGER by default
 
+paging results
+--------------
+Demo shows HIbernate and JPA criteria APIs to page the results. HQL and JPQL can also be used to do the same.
+
 
 
  

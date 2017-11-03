@@ -2,6 +2,7 @@ package com.learning.data;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -27,6 +28,11 @@ public class ApplicationPersistenceLayer
 			tx = session.beginTransaction();
 			
 			userDao.save(createUser());
+			
+			List<User> users = userDao.findByFirstName("John");
+			for (User user : users){
+				System.out.println(user.getLastName());
+			}
 			
 			tx.commit();
 			

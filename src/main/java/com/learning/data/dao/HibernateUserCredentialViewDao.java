@@ -1,13 +1,14 @@
 package com.learning.data.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.learning.data.dao.interfaces.UserCredentialViewDao;
 import com.learning.data.entities.UserCredentialView;
 
+//As this is a Read Only Dao mask all the Write Operations
 public class HibernateUserCredentialViewDao extends AbstractDao<UserCredentialView, Long> implements UserCredentialViewDao
 {
 	public HibernateUserCredentialViewDao(Session session)
@@ -25,14 +26,11 @@ public class HibernateUserCredentialViewDao extends AbstractDao<UserCredentialVi
 		//do nothing
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserCredentialView> findByUserName(String userName)
 	{
-		List<UserCredentialView> userCredentials = new ArrayList<>();
-		
-		//Implementation goes here
-		
-		return userCredentials;
+		return super.getSession().createCriteria(UserCredentialView.class).
+			add(Restrictions.eq("userName", userName)).list();
 	}
-
 }
