@@ -5,15 +5,14 @@
 <hibernate-configuration>
   <session-factory>
   
-  	<!-- Using hibernate's ability to create/validate/update/drop schema. This is strongly adviced to be used only in DEV -->
-  	<property name="hbm2ddl.auto">create-drop</property>
-  
+  	<!-- Using hibernate's ability to create/validate/update/drop schema. This is strongly advised to be used only in DEV -->
+  	<!-- property name="hbm2ddl.auto">create</property -->
   
     <!-- Database connection settings -->
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="connection.url">jdbc:mysql://localhost:3306/ifinances2</property>
-    <property name="connection.username">infinite2</property>
-    <property name="connection.password">skills2</property>
+    <property name="connection.url">jdbc:mysql://localhost:3306/ifinances</property>
+    <property name="connection.username">infinite</property>
+    <property name="connection.password">skills</property>
 
     <!-- SQL dialect -->
     <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>

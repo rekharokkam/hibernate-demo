@@ -12,19 +12,30 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 //import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table (name="account")
+@NamedQueries ({
+	@NamedQuery (name="Account.largeDeposits" , query="select distinct t.account from Transaction t "
+			+ "where t.amount > 500 and lower(t.transactionType) = 'Deposit'"),
+	@NamedQuery (name="Account.byWithdrawlAmount", query="select distinct t.account.name, concat (concat (t.account.bank.name, ' '), t.account.bank.address.state) "
+					+ "from Transaction t "
+					+ "where t.amount > :amount and t.transactionType = 'withdrawl'")
+})
+
 public class Account
 {
 	@Id
@@ -41,7 +52,8 @@ public class Account
 	@OneToMany (cascade=CascadeType.ALL, mappedBy="account")
 	private List<Transaction> transactions = new ArrayList<>();
 	
-	@Transient
+	@ManyToOne (fetch=FetchType.LAZY)//fetches the element on need basis
+	@JoinColumn (name="BANK_ID", referencedColumnName="BANK_ID")
 	private Bank bank;
 	
 	@Enumerated(EnumType.STRING)
@@ -302,6 +314,4 @@ public class Account
 	{
 		this.users = users;
 	}
-	
-	
 }
