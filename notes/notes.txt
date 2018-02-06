@@ -154,7 +154,7 @@ OneToMany - One Account can have Multiple Transactions
 ManyToOne - Many Transactions can have one Account
 ManyToMany - Many users can be associated with many Accounts. Husband and Wife could be operating multiple accounts.
 
-Getting a big stack trace of PDT error with the latest mysql connector. So downgrade the version to 5.1.39 to resolve this issue.
+Getting a big stack trace of PDT error with the latest mysql connector. So downgraded the version to 5.1.39 to resolve this issue.
 
 OneToOne - Bidirectional relationship.
 --------------------------------------
